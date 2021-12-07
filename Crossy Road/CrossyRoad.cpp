@@ -4,6 +4,21 @@
 #include <conio.h>
 #include <time.h>
 using namespace std;
+
+#include <windows.h>
+#include <Windows.h>
+
+void clearscreen()
+{
+    HANDLE hOut;
+    COORD Position;
+
+    hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    Position.X = 0;
+    Position.Y = 0;
+    SetConsoleCursorPosition(hOut, Position);
+}
 class cPlayer
 {
 public:
@@ -22,7 +37,7 @@ public:
             cars.push_front(true);
         right = rand() % 2;
     }
-  /*
+  
     void Move()
     {
         if (right)
@@ -43,9 +58,10 @@ public:
         }
 
     }
-*/
+   
     bool CheckPos(int pos) { return cars[pos]; }
     void ChangeDirection() { right = !right; }
+    
 };
 class cGame
 {
@@ -79,14 +95,15 @@ public:
     void Draw()
     {
         system("cls");
+        //clearscreen();  // higher refresh rate! -> more difficult Letzte Implementation
         for (int i = 0; i < numberOfLanes; i++)
         {
             for (int j = 0; j < width; j++)
             {
-                if (i == 0 && (j == 0 || j == width - 1)) cout << "S";
-                if (i == numberOfLanes - 1 && (j == 0 || j == width - 1)) cout << "F";
+                if (i == 0 && (j == 0 || j == width - 1)) cout << "|";
+                if (i == numberOfLanes - 1 && (j == 0 || j == width - 1)) cout << "|";
                 if (map[i]->CheckPos(j) && i != 0 && i != numberOfLanes - 1)
-                    cout << "#";
+                    cout << "#"; 
                 else if (player->x == j && player->y == i)
                     cout << "V";
                 else
@@ -94,7 +111,7 @@ public:
             }
             cout << endl;
         }
-        cout << "Score: " << score << endl;
+        //cout << "Score: " << score << endl; // Letzte Implementation
     }
     void Input()
     {
@@ -109,11 +126,11 @@ public:
                 player->y--;
             if (current == 's')
                 player->y++;
-            if (current == 'q')
-                quit = true;
+            //if (current == 'q') Letzte Implementation
+            //    quit = true;
         }
     }
-    /*
+    
     void Logic()
     {
         for (int i = 1; i < numberOfLanes - 1; i++)
@@ -127,28 +144,44 @@ public:
         {
             score++;
             player->y = 0;
-            cout << "\x07";
+            //cout << "\x07"; Letzte Implementation
             map[rand() % numberOfLanes]->ChangeDirection();
         }
     }
-    */
+    
     void Run()
     {
         while (!quit)
         {
             Input();
             Draw();
-            //Logic();
+            Logic();
         }
     }
 };
 int main()
 {
     srand(time(NULL));
-    cGame game(50, 10);
+    int x, y = 0;
+    
+    cout << "Eingabe Spielfeldgroesse:" << endl;
+    cin >> x >> y;
+    if (x > 100) {
+        x=100;
+    }
+    else if (x == 0) {
+        x = 50;
+    }
+    if (y > 25) {
+        y = 25;
+    }
+    else if (y == 0) {
+        y = 5;
+    }
+    cGame game(x,y);
     game.Run();
     cout << "Game over!" << endl;
+    //exit(0);
     getchar();
-    exit(0);
     return 0;
 }

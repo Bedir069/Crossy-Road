@@ -15,8 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Quelle.cpp">
+    <ClCompile Include="CrossyRoad.cpp">
       <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Quelle.cpp">
+      <Filter>Headerdateien</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
