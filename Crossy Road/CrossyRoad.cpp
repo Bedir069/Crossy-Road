@@ -94,8 +94,8 @@ public:
     }
     void Draw()
     {
-        system("cls");
-        //clearscreen();  // higher refresh rate! -> more difficult Letzte Implementation
+        //system("cls");
+        clearscreen();  // higher refresh rate! -> more difficult Letzte Implementation
         for (int i = 0; i < numberOfLanes; i++)
         {
             for (int j = 0; j < width; j++)
@@ -111,7 +111,7 @@ public:
             }
             cout << endl;
         }
-        //cout << "Score: " << score << endl; // Letzte Implementation
+        cout << "Score: " << score << endl; 
     }
     void Input()
     {
@@ -126,8 +126,8 @@ public:
                 player->y--;
             if (current == 's')
                 player->y++;
-            //if (current == 'q') Letzte Implementation
-            //    quit = true;
+            if (current == 'q') 
+                quit = true;
         }
     }
     
@@ -143,8 +143,9 @@ public:
         if (player->y == numberOfLanes - 1)
         {
             score++;
-            player->y = 0;
-            //cout << "\x07"; Letzte Implementation
+            player->y = 0;  
+            cout << "\x07"; 
+            
             map[rand() % numberOfLanes]->ChangeDirection();
         }
     }
@@ -158,16 +159,32 @@ public:
             Logic();
         }
     }
-};
-int main()
-{
-    srand(time(NULL));
-    int x, y = 0;
     
+};
+void gameReset();
+void createGame(int x, int y);
+int x, y = 0;
+int resetButton = 0;
+
+void gameReset() {
+    getchar();
+    cout << "Type 1 to reset the game or 2 to quit:";
+    char reset = getchar();
+    if (reset == 49) {
+        system("cls");
+        createGame(x, y);
+    }
+    else if (reset == 50) {
+        system("cls");
+        resetButton = 1;
+    }
+}
+void createGame(int x,int y) {
+
     cout << "Eingabe Spielfeldgroesse:" << endl;
     cin >> x >> y;
     if (x > 100) {
-        x=100;
+        x = 100;
     }
     else if (x == 0) {
         x = 50;
@@ -178,10 +195,18 @@ int main()
     else if (y == 0) {
         y = 5;
     }
-    cGame game(x,y);
+
+    cGame game(x, y);
     game.Run();
     cout << "Game over!" << endl;
-    //exit(0);
-    getchar();
-    return 0;
+    gameReset();
+}
+int main()
+{
+    do {
+        srand(time(NULL));  
+        createGame(x, y);
+    }
+    while (!resetButton);
+
 }
